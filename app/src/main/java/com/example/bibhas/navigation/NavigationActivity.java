@@ -22,13 +22,6 @@ public class NavigationActivity extends Activity {
     }
 
     public void pushViewController(ViewController viewController, boolean animated) {
-        if (viewController.getView() == null) {
-            View v = getLayoutInflater().inflate(viewController.getLayoutResourceId(), null);
-
-            viewController.setView(v);
-            viewController.viewDidLoad();
-        }
-
         //Call viewWillDisappear for the currently visible view controller.
         ViewController currentTop = viewControllers.peek();
 
@@ -41,6 +34,8 @@ public class NavigationActivity extends Activity {
             currentTop.viewDidDisappear();
         }
 
+        loadViewIfNeeded(viewController);
+
         viewController.setNavigationActivity(this);
         viewController.viewWillAppear();
 
@@ -51,6 +46,15 @@ public class NavigationActivity extends Activity {
         viewController.viewDidAppear();
 
         manageActionbarBackButton();
+    }
+
+    private void loadViewIfNeeded(ViewController viewController) {
+        if (viewController.getView() == null) {
+            View v = getLayoutInflater().inflate(viewController.getLayoutResourceId(), null);
+
+            viewController.setView(v);
+            viewController.viewDidLoad();
+        }
     }
 
     public void popViewController(boolean animated) {
@@ -69,6 +73,7 @@ public class NavigationActivity extends Activity {
         currentTop = viewControllers.peek();
 
         if (currentTop != null) {
+            loadViewIfNeeded(currentTop);
             currentTop.setNavigationActivity(this);
             currentTop.viewWillAppear();
 
@@ -103,6 +108,7 @@ public class NavigationActivity extends Activity {
         currentTop = viewControllers.peek();
 
         if (currentTop != null) {
+            loadViewIfNeeded(currentTop);
             currentTop.setNavigationActivity(this);
             currentTop.viewWillAppear();
 
