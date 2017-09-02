@@ -1,5 +1,6 @@
 package com.example.bibhas.navigation;
 
+import android.view.MenuItem;
 import android.view.View;
 
 public class ViewControllerB extends ViewController {
@@ -17,6 +18,8 @@ public class ViewControllerB extends ViewController {
                 getNavigationActivity().pushViewController(new ViewControllerA(), true);
             }
         });
+
+        setOptionMenuResourceId(R.menu.view_controler_b_menu);
     }
 
     @Override
@@ -24,5 +27,16 @@ public class ViewControllerB extends ViewController {
         super.viewWillAppear();
 
         getNavigationActivity().setTitle("View Controller B");
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.popToRoot) {
+            getNavigationActivity().popToRootViewController(false);
+
+            return true;
+        } else {
+            return super.onOptionsItemSelected(item);
+        }
     }
 }
