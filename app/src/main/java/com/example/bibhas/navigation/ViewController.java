@@ -1,11 +1,13 @@
 package com.example.bibhas.navigation;
 
+import android.view.MenuItem;
 import android.view.View;
 
 public class ViewController {
     private View view;
     private NavigationActivity activity;
     private int layoutResourceId;
+    private Integer optionMenuResourceId;
 
     public ViewController(int layoutResourceId) {
         this.layoutResourceId = layoutResourceId;
@@ -49,5 +51,17 @@ public class ViewController {
 
     public void viewDidDisappear() {
 
+    }
+
+    public Integer getOptionMenuResourceId() {
+        return optionMenuResourceId;
+    }
+
+    public void setOptionMenuResourceId(Integer optionMenuResourceId) {
+        this.optionMenuResourceId = optionMenuResourceId;
+    }
+
+    public boolean onOptionsItemSelected(MenuItem item) {
+        return false;
     }
 }

@@ -2,6 +2,8 @@ package com.example.bibhas.navigation;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -32,7 +34,7 @@ public class NavigationActivity extends Activity {
 
         presentOnScreen(viewController);
 
-        configureActionbarBackButton();
+        onNavigationCompleted();
     }
 
     public void popViewController(boolean animated) {
@@ -44,7 +46,7 @@ public class NavigationActivity extends Activity {
 
         presentOnScreen(currentTop);
 
-        configureActionbarBackButton();
+        onNavigationCompleted();
     }
 
     public List<ViewController> getViewControllers() {
@@ -66,7 +68,7 @@ public class NavigationActivity extends Activity {
 
         presentOnScreen(currentTop);
 
-        configureActionbarBackButton();
+        onNavigationCompleted();
     }
 
     public void popToRootViewController(boolean animated) {
@@ -88,7 +90,7 @@ public class NavigationActivity extends Activity {
 
         presentOnScreen(currentTop);
 
-        configureActionbarBackButton();
+        onNavigationCompleted();
     }
 
     @Override
@@ -100,15 +102,25 @@ public class NavigationActivity extends Activity {
         }
     }
 
-    protected void configureActionbarBackButton() {
+    protected void onNavigationCompleted() {
         getActionBar().setDisplayHomeAsUpEnabled(
                 viewControllers.size() > 1);
         getActionBar().setHomeButtonEnabled(
                 viewControllers.size() > 1);
+
+        invalidateOptionsMenu();
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        ViewController currentTop = viewControllers.peek();
+
+        if (currentTop != null) {
+            if (currentTop.onOptionsItemSelected(item)) {
+                return true;
+            }
+        }
+
         switch (item.getItemId()) {
             case android.R.id.home:
                 onBackPressed();
@@ -116,6 +128,23 @@ public class NavigationActivity extends Activity {
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        ViewController currentTop = viewControllers.peek();
+
+        if (currentTop != null) {
+            if (currentTop.getOptionMenuResourceId() != null) {
+                MenuInflater inflater = getMenuInflater();
+
+                inflater.inflate(currentTop.getOptionMenuResourceId(), menu);
+
+                return true;
+            }
+        }
+
+        return super.onCreateOptionsMenu(menu);
     }
 
     protected void loadViewIfNeeded(ViewController viewController) {
