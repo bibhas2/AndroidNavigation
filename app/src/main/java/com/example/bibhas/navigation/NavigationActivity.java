@@ -25,55 +25,32 @@ public class NavigationActivity extends Activity {
         //Call viewWillDisappear for the currently visible view controller.
         ViewController currentTop = viewControllers.peek();
 
-        if (currentTop != null) {
-            currentTop.viewWillDisappear();
-
-            currentTop.setNavigationActivity(null);
-            rootView.removeView(currentTop.getView());
-
-            currentTop.viewDidDisappear();
-        }
+        removeFromScreen(currentTop);
 
         viewControllers.push(viewController);
 
         presentOnScreen(viewController);
 
-        manageActionbarBackButton();
+        configureActionbarBackButton();
     }
 
     public void popViewController(boolean animated) {
-        ViewController currentTop = viewControllers.peek();
+        ViewController currentTop = viewControllers.pop();
 
-        if (currentTop != null) {
-            currentTop.viewWillDisappear();
-
-            currentTop.setNavigationActivity(null);
-            viewControllers.pop();
-            rootView.removeView(currentTop.getView());
-
-            currentTop.viewDidDisappear();
-        }
+        removeFromScreen(currentTop);
 
         currentTop = viewControllers.peek();
 
         presentOnScreen(currentTop);
 
-        manageActionbarBackButton();
+        configureActionbarBackButton();
     }
 
     public void setViewControllers(List<ViewController> list) {
         //Clear the top most one with lifecycle
-        ViewController currentTop = viewControllers.peek();
+        ViewController currentTop = viewControllers.pop();
 
-        if (currentTop != null) {
-            currentTop.viewWillDisappear();
-
-            currentTop.setNavigationActivity(null);
-            viewControllers.pop();
-            rootView.removeView(currentTop.getView());
-
-            currentTop.viewDidDisappear();
-        }
+        removeFromScreen(currentTop);
 
         viewControllers.clear();
 
@@ -84,7 +61,7 @@ public class NavigationActivity extends Activity {
 
         presentOnScreen(currentTop);
 
-        manageActionbarBackButton();
+        configureActionbarBackButton();
     }
 
     @Override
@@ -100,7 +77,7 @@ public class NavigationActivity extends Activity {
         return viewControllers;
     }
 
-    private void manageActionbarBackButton() {
+    protected void configureActionbarBackButton() {
         getActionBar().setDisplayHomeAsUpEnabled(
                 viewControllers.size() > 1);
     }
@@ -116,7 +93,7 @@ public class NavigationActivity extends Activity {
         }
     }
 
-    private void loadViewIfNeeded(ViewController viewController) {
+    protected void loadViewIfNeeded(ViewController viewController) {
         if (viewController.getView() == null) {
             View v = getLayoutInflater().inflate(viewController.getLayoutResourceId(), null);
 
@@ -125,7 +102,7 @@ public class NavigationActivity extends Activity {
         }
     }
 
-    private void presentOnScreen(ViewController viewController) {
+    protected void presentOnScreen(ViewController viewController) {
         if (viewController != null) {
             loadViewIfNeeded(viewController);
             viewController.setNavigationActivity(this);
@@ -135,6 +112,22 @@ public class NavigationActivity extends Activity {
             rootView.addView(viewController.getView());
 
             viewController.viewDidAppear();
+        }
+    }
+
+    protected void removeFromScreen(ViewController viewController) {
+        if (viewController != null) {
+
+            if (viewController.getView() == null) {
+                throw new IllegalStateException("The view for this view controller was never created.");
+            }
+
+            viewController.viewWillDisappear();
+
+            viewController.setNavigationActivity(null);
+            rootView.removeView(viewController.getView());
+
+            viewController.viewDidDisappear();
         }
     }
 }
