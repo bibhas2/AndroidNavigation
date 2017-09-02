@@ -34,27 +34,11 @@ public class NavigationActivity extends Activity {
             currentTop.viewDidDisappear();
         }
 
-        loadViewIfNeeded(viewController);
-
-        viewController.setNavigationActivity(this);
-        viewController.viewWillAppear();
-
-        //Add the view
         viewControllers.push(viewController);
-        rootView.addView(viewController.getView());
 
-        viewController.viewDidAppear();
+        presentOnScreen(viewController);
 
         manageActionbarBackButton();
-    }
-
-    private void loadViewIfNeeded(ViewController viewController) {
-        if (viewController.getView() == null) {
-            View v = getLayoutInflater().inflate(viewController.getLayoutResourceId(), null);
-
-            viewController.setView(v);
-            viewController.viewDidLoad();
-        }
     }
 
     public void popViewController(boolean animated) {
@@ -72,16 +56,7 @@ public class NavigationActivity extends Activity {
 
         currentTop = viewControllers.peek();
 
-        if (currentTop != null) {
-            loadViewIfNeeded(currentTop);
-            currentTop.setNavigationActivity(this);
-            currentTop.viewWillAppear();
-
-            //Add the view
-            rootView.addView(currentTop.getView());
-
-            currentTop.viewDidAppear();
-        }
+        presentOnScreen(currentTop);
 
         manageActionbarBackButton();
     }
@@ -107,16 +82,7 @@ public class NavigationActivity extends Activity {
         //Show the top most
         currentTop = viewControllers.peek();
 
-        if (currentTop != null) {
-            loadViewIfNeeded(currentTop);
-            currentTop.setNavigationActivity(this);
-            currentTop.viewWillAppear();
-
-            //Add the view
-            rootView.addView(currentTop.getView());
-
-            currentTop.viewDidAppear();
-        }
+        presentOnScreen(currentTop);
 
         manageActionbarBackButton();
     }
@@ -147,6 +113,28 @@ public class NavigationActivity extends Activity {
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
+        }
+    }
+
+    private void loadViewIfNeeded(ViewController viewController) {
+        if (viewController.getView() == null) {
+            View v = getLayoutInflater().inflate(viewController.getLayoutResourceId(), null);
+
+            viewController.setView(v);
+            viewController.viewDidLoad();
+        }
+    }
+
+    private void presentOnScreen(ViewController viewController) {
+        if (viewController != null) {
+            loadViewIfNeeded(viewController);
+            viewController.setNavigationActivity(this);
+            viewController.viewWillAppear();
+
+            //Add the view
+            rootView.addView(viewController.getView());
+
+            viewController.viewDidAppear();
         }
     }
 }
