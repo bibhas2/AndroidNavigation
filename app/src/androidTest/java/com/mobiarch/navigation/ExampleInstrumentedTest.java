@@ -1,4 +1,4 @@
-package com.example.bibhas.navigation;
+package com.mobiarch.navigation;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;

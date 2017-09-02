@@ -1,4 +1,4 @@
-package com.example.bibhas.navigation;
+package com.mobiarch.navigation;
 
 import org.junit.Test;
 
