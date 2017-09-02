@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.LinearLayout;
 
 import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.List;
 
 public class NavigationActivity extends Activity {
@@ -46,6 +47,10 @@ public class NavigationActivity extends Activity {
         configureActionbarBackButton();
     }
 
+    public List<ViewController> getViewControllers() {
+        return new ArrayList<>(viewControllers);
+    }
+
     public void setViewControllers(List<ViewController> list) {
         //Clear the top most one with lifecycle
         ViewController currentTop = viewControllers.pop();
@@ -71,10 +76,6 @@ public class NavigationActivity extends Activity {
         } else {
             popViewController(true);
         }
-    }
-
-    public ArrayDeque<ViewController> getViewControllers() {
-        return viewControllers;
     }
 
     protected void configureActionbarBackButton() {
