@@ -69,6 +69,28 @@ public class NavigationActivity extends Activity {
         configureActionbarBackButton();
     }
 
+    public void popToRootViewController(boolean animated) {
+        if (viewControllers.size() < 2) {
+            return; //Nothing to do
+        }
+
+        //Clear the top most one with lifecycle
+        ViewController currentTop = viewControllers.pop();
+
+        removeFromScreen(currentTop);
+
+        while (viewControllers.size() > 1) {
+            viewControllers.pop();
+        }
+
+        //Show the top most
+        currentTop = viewControllers.peek();
+
+        presentOnScreen(currentTop);
+
+        configureActionbarBackButton();
+    }
+
     @Override
     public void onBackPressed() {
         if (viewControllers.size() <= 1) {
