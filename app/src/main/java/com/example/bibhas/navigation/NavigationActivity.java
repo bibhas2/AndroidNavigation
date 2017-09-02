@@ -80,6 +80,8 @@ public class NavigationActivity extends Activity {
     protected void configureActionbarBackButton() {
         getActionBar().setDisplayHomeAsUpEnabled(
                 viewControllers.size() > 1);
+        getActionBar().setHomeButtonEnabled(
+                viewControllers.size() > 1);
     }
 
     @Override
