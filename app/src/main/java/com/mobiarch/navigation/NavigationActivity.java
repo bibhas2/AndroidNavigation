@@ -13,6 +13,13 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * <p>NavigationActivity hosts a stack of ViewController objects.
+ * It is analogous to UIViewController in iOS.</p>
+ *
+ * <p>You will need to subclass this class. From the onCreate() method
+ * push the root view controller.</p>
+ */
 public class NavigationActivity extends Activity {
     LinearLayout rootView;
     ArrayDeque<ViewController> viewControllers = new ArrayDeque<>();
@@ -55,6 +62,14 @@ public class NavigationActivity extends Activity {
         removeFromScreen(getTopViewController());
     }
 
+    /**
+     * Pushes a view controller to the stack. It can be called from anywhere
+     * in the lifecycle of the activity. For example, it is safe to call this
+     * from the onCreate() method.
+     *
+     * @param viewController The view controller to be pushed to the top of the stack.
+     * @param animated If animation should be used to present the view controller.
+     */
     public void pushViewController(ViewController viewController, boolean animated) {
         //Call viewWillDisappear for the currently visible view controller.
         ViewController currentTop = viewControllers.peek();
@@ -68,6 +83,13 @@ public class NavigationActivity extends Activity {
         onNavigationCompleted();
     }
 
+    /**
+     * The top most view controller is removed from the stack. This method
+     * is also called automatically when user taps the system back button or
+     * the back button in the actionbar.
+     *
+     * @param animated If animation should be used to remove the view.
+     */
     public void popViewController(boolean animated) {
         ViewController currentTop = viewControllers.pop();
 
@@ -80,10 +102,21 @@ public class NavigationActivity extends Activity {
         onNavigationCompleted();
     }
 
+    /**
+     * Get a list of all view controllers in the stack.
+     *
+     * @return
+     */
     public List<ViewController> getViewControllers() {
         return new ArrayList<>(viewControllers);
     }
 
+    /**
+     * Set the view controllers in the stack. Any existing view controllers
+     * in the stack are removed.
+     *
+     * @param list The new list of view controllers.
+     */
     public void setViewControllers(List<ViewController> list) {
         //Clear the top most one with lifecycle
         ViewController currentTop = viewControllers.pop();
@@ -102,6 +135,12 @@ public class NavigationActivity extends Activity {
         onNavigationCompleted();
     }
 
+    /**
+     * Removes all view controllers from the stack except for the bottom most
+     * one.
+     * 
+     * @param animated
+     */
     public void popToRootViewController(boolean animated) {
         if (viewControllers.size() < 2) {
             return; //Nothing to do
@@ -193,6 +232,10 @@ public class NavigationActivity extends Activity {
 
     protected void presentOnScreen(ViewController viewController) {
         if (viewController != null) {
+            if (viewController.getNavigationActivity() != null) {
+                throw new IllegalStateException("This view controller is already presented on screen.");
+            }
+
             loadViewIfNeeded(viewController);
             viewController.setNavigationActivity(this);
             viewController.viewWillAppear();
