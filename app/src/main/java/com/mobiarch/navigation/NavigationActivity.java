@@ -16,6 +16,7 @@ import java.util.List;
 public class NavigationActivity extends Activity {
     LinearLayout rootView;
     ArrayDeque<ViewController> viewControllers = new ArrayDeque<>();
+    boolean isFirstLaunch = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,6 +24,35 @@ public class NavigationActivity extends Activity {
         setContentView(R.layout.navigation_activity);
 
         rootView = (LinearLayout) findViewById(R.id.rootView);
+
+        isFirstLaunch = true;
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        if (isFirstLaunch == false) {
+            /*
+            Activity is coming to foreground but not
+            from the initial launch. Which means this block
+            will match a corresponding onStop call made earlier.
+
+            Show the top most view controller with lifecycle.
+            */
+            presentOnScreen(getTopViewController());
+        }
+
+        isFirstLaunch = false;
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+
+        //Activity has become invisible. Invoke lifecycle
+        //of the top view controller.
+        removeFromScreen(getTopViewController());
     }
 
     public void pushViewController(ViewController viewController, boolean animated) {
