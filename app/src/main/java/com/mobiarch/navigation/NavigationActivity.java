@@ -1,6 +1,7 @@
 package com.mobiarch.navigation;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -147,6 +148,10 @@ public class NavigationActivity extends Activity {
         return super.onCreateOptionsMenu(menu);
     }
 
+    public ViewController getTopViewController() {
+        return viewControllers.peek();
+    }
+
     protected void loadViewIfNeeded(ViewController viewController) {
         if (viewController.getView() == null) {
             View v = getLayoutInflater().inflate(viewController.getLayoutResourceId(), null);
@@ -182,6 +187,17 @@ public class NavigationActivity extends Activity {
             rootView.removeView(viewController.getView());
 
             viewController.viewDidDisappear();
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        ViewController controller = getTopViewController();
+
+        if (controller != null) {
+            controller.onActivityResult(requestCode, resultCode, data);
         }
     }
 }

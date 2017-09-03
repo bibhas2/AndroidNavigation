@@ -1,5 +1,6 @@
 package com.mobiarch.navigation;
 
+import android.content.Intent;
 import android.view.MenuItem;
 import android.view.View;
 
@@ -63,5 +64,8 @@ public class ViewController {
 
     public boolean onOptionsItemSelected(MenuItem item) {
         return false;
+    }
+
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
     }
 }
