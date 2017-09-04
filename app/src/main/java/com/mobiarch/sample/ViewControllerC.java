@@ -17,7 +17,7 @@ public class ViewControllerC extends ViewController {
         getView().findViewById(R.id.buttonToPushController).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getNavigationActivity().pushViewController(new ViewControllerA(), true);
+                getNavigationActivity().pushViewController(new ViewControllerC(), true);
             }
         });
 
