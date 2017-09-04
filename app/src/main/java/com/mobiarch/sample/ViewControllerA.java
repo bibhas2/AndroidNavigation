@@ -1,7 +1,10 @@
-package com.mobiarch.navigation;
+package com.mobiarch.sample;
 
 import android.util.Log;
 import android.view.View;
+
+import com.mobiarch.sample.R;
+import com.mobiarch.navigation.ViewController;
 
 public class ViewControllerA extends ViewController {
     public ViewControllerA() {

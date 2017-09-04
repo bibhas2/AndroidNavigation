@@ -1,7 +1,10 @@
-package com.mobiarch.navigation;
+package com.mobiarch.sample;
 
 import android.view.MenuItem;
 import android.view.View;
+
+import com.mobiarch.sample.R;
+import com.mobiarch.navigation.ViewController;
 
 public class ViewControllerB extends ViewController {
     public ViewControllerB() {

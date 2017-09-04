@@ -1,4 +1,4 @@
-package com.mobiarch.navigation;
+package com.mobiarch.sample;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
@@ -21,6 +21,6 @@ public class ExampleInstrumentedTest {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getTargetContext();
 
-        assertEquals("com.example.bibhas.androidnavigation", appContext.getPackageName());
+        assertEquals("com.mobiarch.navigationlibrary.test", appContext.getPackageName());
     }
 }

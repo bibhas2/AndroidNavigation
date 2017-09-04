@@ -1,6 +1,8 @@
-package com.mobiarch.navigation;
+package com.mobiarch.sample;
 
 import android.os.Bundle;
+
+import com.mobiarch.navigation.NavigationActivity;
 
 public class MyActivity extends NavigationActivity {
     @Override

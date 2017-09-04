@@ -1,4 +1,4 @@
-package com.mobiarch.navigation;
+package com.mobiarch.sample;
 
 import org.junit.Test;
 
