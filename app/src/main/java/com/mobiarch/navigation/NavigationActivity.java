@@ -47,7 +47,7 @@ public class NavigationActivity extends Activity {
 
             Show the top most view controller with lifecycle.
             */
-            presentOnScreen(getTopViewController());
+            addToViewHierarchy(getTopViewController());
         }
 
         isFirstLaunch = false;
@@ -59,7 +59,7 @@ public class NavigationActivity extends Activity {
 
         //Activity has become invisible. Invoke lifecycle
         //of the top view controller.
-        removeFromScreen(getTopViewController());
+        removeFromViewHierarchy(getTopViewController());
     }
 
     /**
@@ -74,11 +74,11 @@ public class NavigationActivity extends Activity {
         //Call viewWillDisappear for the currently visible view controller.
         ViewController currentTop = viewControllers.peek();
 
-        removeFromScreen(currentTop);
+        removeFromViewHierarchy(currentTop);
 
         viewControllers.push(viewController);
 
-        presentOnScreen(viewController);
+        addToViewHierarchy(viewController);
 
         onNavigationCompleted();
     }
@@ -93,11 +93,11 @@ public class NavigationActivity extends Activity {
     public void popViewController(boolean animated) {
         ViewController currentTop = viewControllers.pop();
 
-        removeFromScreen(currentTop);
+        removeFromViewHierarchy(currentTop);
 
         currentTop = viewControllers.peek();
 
-        presentOnScreen(currentTop);
+        addToViewHierarchy(currentTop);
 
         onNavigationCompleted();
     }
@@ -121,7 +121,7 @@ public class NavigationActivity extends Activity {
         //Clear the top most one with lifecycle
         ViewController currentTop = viewControllers.pop();
 
-        removeFromScreen(currentTop);
+        removeFromViewHierarchy(currentTop);
 
         viewControllers.clear();
 
@@ -130,7 +130,7 @@ public class NavigationActivity extends Activity {
         //Show the top most
         currentTop = viewControllers.peek();
 
-        presentOnScreen(currentTop);
+        addToViewHierarchy(currentTop);
 
         onNavigationCompleted();
     }
@@ -138,7 +138,7 @@ public class NavigationActivity extends Activity {
     /**
      * Removes all view controllers from the stack except for the bottom most
      * one.
-     * 
+     *
      * @param animated
      */
     public void popToRootViewController(boolean animated) {
@@ -149,7 +149,7 @@ public class NavigationActivity extends Activity {
         //Clear the top most one with lifecycle
         ViewController currentTop = viewControllers.pop();
 
-        removeFromScreen(currentTop);
+        removeFromViewHierarchy(currentTop);
 
         while (viewControllers.size() > 1) {
             viewControllers.pop();
@@ -158,7 +158,7 @@ public class NavigationActivity extends Activity {
         //Show the top most
         currentTop = viewControllers.peek();
 
-        presentOnScreen(currentTop);
+        addToViewHierarchy(currentTop);
 
         onNavigationCompleted();
     }
@@ -230,7 +230,7 @@ public class NavigationActivity extends Activity {
         }
     }
 
-    protected void presentOnScreen(ViewController viewController) {
+    protected void addToViewHierarchy(ViewController viewController) {
         if (viewController != null) {
             if (viewController.getNavigationActivity() != null) {
                 throw new IllegalStateException("This view controller is already presented on screen.");
@@ -247,7 +247,7 @@ public class NavigationActivity extends Activity {
         }
     }
 
-    protected void removeFromScreen(ViewController viewController) {
+    protected void removeFromViewHierarchy(ViewController viewController) {
         if (viewController != null) {
 
             if (viewController.getView() == null) {
