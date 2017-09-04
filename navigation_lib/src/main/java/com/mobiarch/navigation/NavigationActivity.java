@@ -22,7 +22,7 @@ import java.util.List;
  */
 public class NavigationActivity extends Activity {
     LinearLayout rootView;
-    ArrayDeque<ViewController> viewControllers = new ArrayDeque<>();
+    ArrayDeque<ArrayDeque<ViewController>> stackOfStacks = new ArrayDeque<>();
     boolean isFirstLaunch = true;
 
     @Override
@@ -31,6 +31,9 @@ public class NavigationActivity extends Activity {
         setContentView(R.layout.navigation_activity);
 
         rootView = (LinearLayout) findViewById(R.id.rootView);
+
+        //Create the first stack
+        stackOfStacks.push(new ArrayDeque<ViewController>());
 
         isFirstLaunch = true;
     }
@@ -72,11 +75,11 @@ public class NavigationActivity extends Activity {
      */
     public void pushViewController(ViewController viewController, boolean animated) {
         //Call viewWillDisappear for the currently visible view controller.
-        ViewController currentTop = viewControllers.peek();
+        ViewController currentTop = currentStack().peek();
 
         removeFromViewHierarchy(currentTop);
 
-        viewControllers.push(viewController);
+        currentStack().push(viewController);
 
         addToViewHierarchy(viewController);
 
@@ -91,11 +94,11 @@ public class NavigationActivity extends Activity {
      * @param animated If animation should be used to remove the view.
      */
     public void popViewController(boolean animated) {
-        ViewController currentTop = viewControllers.pop();
+        ViewController currentTop = currentStack().pop();
 
         removeFromViewHierarchy(currentTop);
 
-        currentTop = viewControllers.peek();
+        currentTop = currentStack().peek();
 
         addToViewHierarchy(currentTop);
 
@@ -108,7 +111,7 @@ public class NavigationActivity extends Activity {
      * @return
      */
     public List<ViewController> getViewControllers() {
-        return new ArrayList<>(viewControllers);
+        return new ArrayList<>(currentStack());
     }
 
     /**
@@ -119,16 +122,16 @@ public class NavigationActivity extends Activity {
      */
     public void setViewControllers(List<ViewController> list) {
         //Clear the top most one with lifecycle
-        ViewController currentTop = viewControllers.pop();
+        ViewController currentTop = currentStack().pop();
 
         removeFromViewHierarchy(currentTop);
 
-        viewControllers.clear();
+        currentStack().clear();
 
-        viewControllers.addAll(list);
+        currentStack().addAll(list);
 
         //Show the top most
-        currentTop = viewControllers.peek();
+        currentTop = currentStack().peek();
 
         addToViewHierarchy(currentTop);
 
@@ -142,31 +145,85 @@ public class NavigationActivity extends Activity {
      * @param animated
      */
     public void popToRootViewController(boolean animated) {
-        if (viewControllers.size() < 2) {
+        if (currentStack().size() < 2) {
             return; //Nothing to do
         }
 
         //Clear the top most one with lifecycle
-        ViewController currentTop = viewControllers.pop();
+        ViewController currentTop = currentStack().pop();
 
         removeFromViewHierarchy(currentTop);
 
-        while (viewControllers.size() > 1) {
-            viewControllers.pop();
+        while (currentStack().size() > 1) {
+            currentStack().pop();
         }
 
         //Show the top most
-        currentTop = viewControllers.peek();
+        currentTop = currentStack().peek();
 
         addToViewHierarchy(currentTop);
 
         onNavigationCompleted();
     }
 
+    /**
+     * Opens a view controller in a popup modal. This creates a new
+     * navigation stack. Calling pushViewController() after this will
+     * add a view controller to this new stack.
+     *
+     * @param viewController The view controller to open modally.
+     * @param animated
+     */
+    public void presentViewController(ViewController viewController, boolean animated) {
+        //Remove the currently visible controller with lifecycle
+        removeFromViewHierarchy(getTopViewController());
+
+        //Create a new navigation stack
+        stackOfStacks.push(new ArrayDeque<ViewController>());
+
+        pushViewController(viewController, animated);
+
+        onNavigationCompleted();
+    }
+
+    /**
+     * Closes the top most modally open view controller. This also removes the
+     * top most navigation stack.
+     *
+     * @param animated
+     */
+    public void dismissViewController(boolean animated) {
+        if (stackOfStacks.size() <= 1) {
+            return; //Nothing is presented
+        }
+
+        ViewController currentTop = currentStack().pop();
+
+        //Remove the visible controller with lifecycle
+        removeFromViewHierarchy(currentTop);
+
+        //Get rid of the entire stack
+        stackOfStacks.pop();
+
+        addToViewHierarchy(getTopViewController());
+
+        onNavigationCompleted();
+    }
+
     @Override
     public void onBackPressed() {
-        if (viewControllers.size() <= 1) {
-            super.onBackPressed();
+        if (currentStack().size() <= 1) {
+            /*
+            We have only one controller left in the stack.
+            If we are presenting a modal, get rid of it and its stack.
+            Otherwise close the whole activity.
+             */
+            if (stackOfStacks.size() > 1) {
+                //We are presenting a modal
+                dismissViewController(true);
+            } else {
+                super.onBackPressed();
+            }
         } else {
             popViewController(true);
         }
@@ -174,16 +231,16 @@ public class NavigationActivity extends Activity {
 
     protected void onNavigationCompleted() {
         getActionBar().setDisplayHomeAsUpEnabled(
-                viewControllers.size() > 1);
+                currentStack().size() > 1);
         getActionBar().setHomeButtonEnabled(
-                viewControllers.size() > 1);
+                currentStack().size() > 1);
 
         invalidateOptionsMenu();
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        ViewController currentTop = viewControllers.peek();
+        ViewController currentTop = currentStack().peek();
 
         if (currentTop != null) {
             if (currentTop.onOptionsItemSelected(item)) {
@@ -202,7 +259,7 @@ public class NavigationActivity extends Activity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        ViewController currentTop = viewControllers.peek();
+        ViewController currentTop = currentStack().peek();
 
         if (currentTop != null) {
             if (currentTop.getOptionMenuResourceId() != null) {
@@ -218,7 +275,7 @@ public class NavigationActivity extends Activity {
     }
 
     public ViewController getTopViewController() {
-        return viewControllers.peek();
+        return currentStack().peek();
     }
 
     protected void loadViewIfNeeded(ViewController viewController) {
@@ -272,5 +329,9 @@ public class NavigationActivity extends Activity {
         if (controller != null) {
             controller.onActivityResult(requestCode, resultCode, data);
         }
+    }
+
+    protected ArrayDeque<ViewController> currentStack() {
+        return stackOfStacks.peek();
     }
 }

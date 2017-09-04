@@ -3,7 +3,6 @@ package com.mobiarch.sample;
 import android.util.Log;
 import android.view.View;
 
-import com.mobiarch.sample.R;
 import com.mobiarch.navigation.ViewController;
 
 public class ViewControllerA extends ViewController {
@@ -17,7 +16,7 @@ public class ViewControllerA extends ViewController {
 
         Log.d("NAV", "viewDidLoad");
 
-        getView().findViewById(R.id.button).setOnClickListener(new View.OnClickListener() {
+        getView().findViewById(R.id.buttonToPushController).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 getNavigationActivity().pushViewController(new ViewControllerB(), true);

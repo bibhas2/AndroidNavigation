@@ -7,7 +7,7 @@
         android:id="@+id/textView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="I am View Controller B"
+        android:text="I am View Controller C"
         android:textAlignment="center"
         android:textSize="18sp"
         android:textStyle="bold" />
@@ -29,5 +29,5 @@
         android:id="@+id/buttonToPresentController"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Present C" />
+        android:text="Present A" />
 </LinearLayout>

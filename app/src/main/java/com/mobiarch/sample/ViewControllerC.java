@@ -5,9 +5,9 @@ import android.view.View;
 
 import com.mobiarch.navigation.ViewController;
 
-public class ViewControllerB extends ViewController {
-    public ViewControllerB() {
-        super(R.layout.view_controller_b);
+public class ViewControllerC extends ViewController {
+    public ViewControllerC() {
+        super(R.layout.view_controller_c);
     }
 
     @Override
@@ -24,24 +24,24 @@ public class ViewControllerB extends ViewController {
         getView().findViewById(R.id.buttonToPresentController).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getNavigationActivity().presentViewController(new ViewControllerC(), true);
+                getNavigationActivity().presentViewController(new ViewControllerA(), true);
             }
         });
 
-        setOptionMenuResourceId(R.menu.view_controler_b_menu);
+        setOptionMenuResourceId(R.menu.view_controler_c_menu);
     }
 
     @Override
     public void viewWillAppear() {
         super.viewWillAppear();
 
-        getNavigationActivity().setTitle("View Controller B");
+        getNavigationActivity().setTitle("View Controller C");
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.popToRoot) {
-            getNavigationActivity().popToRootViewController(false);
+        if (item.getItemId() == R.id.closeModal) {
+            getNavigationActivity().dismissViewController(true);
 
             return true;
         } else {
