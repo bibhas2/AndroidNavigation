@@ -182,8 +182,6 @@ public class NavigationActivity extends Activity {
         stackOfStacks.push(new ArrayDeque<ViewController>());
 
         pushViewController(viewController, animated);
-
-        onNavigationCompleted();
     }
 
     /**
