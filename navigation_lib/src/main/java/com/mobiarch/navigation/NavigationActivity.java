@@ -187,29 +187,35 @@ public class NavigationActivity extends Activity {
         currentStack().push(viewController);
 
         addToViewHierarchy(viewController);
-        viewController.getView().setTranslationY(700);
-        viewController.getView().animate().translationY(0).setListener(new Animator.AnimatorListener() {
-            @Override
-            public void onAnimationStart(Animator animation) {
 
-            }
+        if (animated) {
+            viewController.getView().setTranslationY(700);
+            viewController.getView().animate().translationY(0).setListener(new Animator.AnimatorListener() {
+                @Override
+                public void onAnimationStart(Animator animation) {
 
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                removeFromViewHierarchy(lastTopController);
-                onNavigationCompleted();
-            }
+                }
 
-            @Override
-            public void onAnimationCancel(Animator animation) {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    removeFromViewHierarchy(lastTopController);
+                    onNavigationCompleted();
+                }
 
-            }
+                @Override
+                public void onAnimationCancel(Animator animation) {
 
-            @Override
-            public void onAnimationRepeat(Animator animation) {
+                }
 
-            }
-        }).start();
+                @Override
+                public void onAnimationRepeat(Animator animation) {
+
+                }
+            }).start();
+        } else {
+            removeFromViewHierarchy(lastTopController);
+            onNavigationCompleted();
+        }
     }
 
     /**
@@ -231,30 +237,37 @@ public class NavigationActivity extends Activity {
         //Show the view of the previous stack but below the current view
         addToViewHierarchy(getTopViewController(), 0);
 
-        lastTopController.getView().animate().translationY(1000).setListener(new Animator.AnimatorListener() {
-            @Override
-            public void onAnimationStart(Animator animation) {
+        if (animated) {
+            lastTopController.getView().animate().translationY(1000).setListener(new Animator.AnimatorListener() {
+                @Override
+                public void onAnimationStart(Animator animation) {
 
-            }
+                }
 
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                //Remove the visible controller with lifecycle
-                removeFromViewHierarchy(lastTopController);
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    //Remove the visible controller with lifecycle
+                    removeFromViewHierarchy(lastTopController);
 
-                onNavigationCompleted();
-            }
+                    onNavigationCompleted();
+                }
 
-            @Override
-            public void onAnimationCancel(Animator animation) {
+                @Override
+                public void onAnimationCancel(Animator animation) {
 
-            }
+                }
 
-            @Override
-            public void onAnimationRepeat(Animator animation) {
+                @Override
+                public void onAnimationRepeat(Animator animation) {
 
-            }
-        }).start();
+                }
+            }).start();
+        } else {
+            //Remove the visible controller with lifecycle
+            removeFromViewHierarchy(lastTopController);
+
+            onNavigationCompleted();
+        }
     }
 
     @Override
