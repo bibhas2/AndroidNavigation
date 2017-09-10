@@ -77,16 +77,41 @@ public class NavigationActivity extends Activity {
      * @param animated If animation should be used to present the view controller.
      */
     public void pushViewController(ViewController viewController, boolean animated) {
-        //Call viewWillDisappear for the currently visible view controller.
-        ViewController currentTop = currentStack().peek();
-
-        removeFromViewHierarchy(currentTop);
+        final ViewController lastTopController = currentStack().peek();
 
         currentStack().push(viewController);
 
         addToViewHierarchy(viewController);
 
-        onNavigationCompleted();
+        if (animated) {
+            viewController.getView().setTranslationX(500);
+            viewController.getView().animate().translationX(0).setListener(new Animator.AnimatorListener() {
+                @Override
+                public void onAnimationStart(Animator animation) {
+                }
+
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    //Remove the last top controller with lifecycle
+                    removeFromViewHierarchy(lastTopController);
+
+                    onNavigationCompleted();
+                }
+
+                @Override
+                public void onAnimationCancel(Animator animation) {
+                }
+
+                @Override
+                public void onAnimationRepeat(Animator animation) {
+                }
+            }).start();
+        } else {
+            //Remove the last top controller with lifecycle
+            removeFromViewHierarchy(lastTopController);
+
+            onNavigationCompleted();
+        }
     }
 
     /**
@@ -97,15 +122,40 @@ public class NavigationActivity extends Activity {
      * @param animated If animation should be used to remove the view.
      */
     public void popViewController(boolean animated) {
-        ViewController currentTop = currentStack().pop();
+        final ViewController lastTopController = currentStack().pop();
 
-        removeFromViewHierarchy(currentTop);
+        //Add the previous controller but below the current one
+        addToViewHierarchy(currentStack().peek(), 0);
 
-        currentTop = currentStack().peek();
+        if (animated) {
+            lastTopController.getView().animate().translationX(500).setListener(new Animator.AnimatorListener() {
+                @Override
+                public void onAnimationStart(Animator animation) {
 
-        addToViewHierarchy(currentTop);
+                }
 
-        onNavigationCompleted();
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    //Remove the last top controller with lifecycle
+                    removeFromViewHierarchy(lastTopController);
+                    onNavigationCompleted();
+                }
+
+                @Override
+                public void onAnimationCancel(Animator animation) {
+
+                }
+
+                @Override
+                public void onAnimationRepeat(Animator animation) {
+
+                }
+            }).start();
+        } else {
+            //Remove the last top controller with lifecycle
+            removeFromViewHierarchy(lastTopController);
+            onNavigationCompleted();
+        }
     }
 
     /**

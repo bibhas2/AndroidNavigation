@@ -9,6 +9,6 @@ public class MyActivity extends NavigationActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        pushViewController(new ViewControllerA(), true);
+        pushViewController(new ViewControllerA(), false);
     }
 }
