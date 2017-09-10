@@ -1,5 +1,6 @@
 package com.mobiarch.navigation;
 
+import android.animation.Animator;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -7,6 +8,8 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 
 import java.util.ArrayDeque;
@@ -21,7 +24,7 @@ import java.util.List;
  * push the root view controller.</p>
  */
 public class NavigationActivity extends Activity {
-    LinearLayout rootView;
+    ViewGroup rootView;
     ArrayDeque<ArrayDeque<ViewController>> stackOfStacks = new ArrayDeque<>();
     boolean isFirstLaunch = true;
 
@@ -30,7 +33,7 @@ public class NavigationActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.navigation_activity);
 
-        rootView = (LinearLayout) findViewById(R.id.rootView);
+        rootView = (ViewGroup) findViewById(R.id.rootView);
 
         //Create the first stack
         stackOfStacks.push(new ArrayDeque<ViewController>());
@@ -176,12 +179,37 @@ public class NavigationActivity extends Activity {
      */
     public void presentViewController(ViewController viewController, boolean animated) {
         //Remove the currently visible controller with lifecycle
-        removeFromViewHierarchy(getTopViewController());
+        final ViewController lastTopController = getTopViewController();
 
         //Create a new navigation stack
         stackOfStacks.push(new ArrayDeque<ViewController>());
 
-        pushViewController(viewController, animated);
+        currentStack().push(viewController);
+
+        addToViewHierarchy(viewController);
+        viewController.getView().setTranslationY(700);
+        viewController.getView().animate().translationY(0).setListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                removeFromViewHierarchy(lastTopController);
+                onNavigationCompleted();
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+
+            }
+        }).start();
     }
 
     /**
@@ -195,17 +223,38 @@ public class NavigationActivity extends Activity {
             return; //Nothing is presented
         }
 
-        ViewController currentTop = currentStack().pop();
+        final ViewController lastTopController = currentStack().pop();
 
-        //Remove the visible controller with lifecycle
-        removeFromViewHierarchy(currentTop);
-
-        //Get rid of the entire stack
+        //Get rid of the entire topmost navigation stack
         stackOfStacks.pop();
 
-        addToViewHierarchy(getTopViewController());
+        //Show the view of the previous stack but below the current view
+        addToViewHierarchy(getTopViewController(), 0);
 
-        onNavigationCompleted();
+        lastTopController.getView().animate().translationY(1000).setListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                //Remove the visible controller with lifecycle
+                removeFromViewHierarchy(lastTopController);
+
+                onNavigationCompleted();
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+
+            }
+        }).start();
     }
 
     @Override
@@ -286,6 +335,10 @@ public class NavigationActivity extends Activity {
     }
 
     protected void addToViewHierarchy(ViewController viewController) {
+        addToViewHierarchy(viewController, null);
+    }
+
+    protected void addToViewHierarchy(ViewController viewController, Integer index) {
         if (viewController != null) {
             if (viewController.getNavigationActivity() != null) {
                 throw new IllegalStateException("This view controller is already presented on screen.");
@@ -296,7 +349,11 @@ public class NavigationActivity extends Activity {
             viewController.viewWillAppear();
 
             //Add the view
-            rootView.addView(viewController.getView());
+            if (index == null) {
+                rootView.addView(viewController.getView());
+            } else {
+                rootView.addView(viewController.getView(), index);
+            }
 
             viewController.viewDidAppear();
         }
