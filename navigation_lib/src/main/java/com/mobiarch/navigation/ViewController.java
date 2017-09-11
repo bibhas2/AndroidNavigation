@@ -103,7 +103,7 @@ public class ViewController {
     /**
      * viewDidDisappear() is called after the view has been removed from the view
      * hierarchy of the activity. The controller no longer has any access to the activity
-     * (ie., getNavigationActivity() will return null from here.
+     * (ie., getActivity() will return null from here.
      */
     public void viewDidDisappear() {
 

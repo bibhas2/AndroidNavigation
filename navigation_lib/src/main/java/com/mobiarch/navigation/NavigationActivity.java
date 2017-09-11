@@ -9,8 +9,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
-import android.widget.LinearLayout;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -65,7 +63,7 @@ public class NavigationActivity extends Activity {
 
         //Activity has become invisible. Invoke lifecycle
         //of the top view controller.
-        removeFromViewHierarchy(getTopViewController());
+        removeFromViewHierarchyOfContainer(getTopViewController());
     }
 
     /**
@@ -93,7 +91,7 @@ public class NavigationActivity extends Activity {
                 @Override
                 public void onAnimationEnd(Animator animation) {
                     //Remove the last top controller with lifecycle
-                    removeFromViewHierarchy(lastTopController);
+                    removeFromViewHierarchyOfContainer(lastTopController);
 
                     onNavigationCompleted();
                 }
@@ -108,7 +106,7 @@ public class NavigationActivity extends Activity {
             }).start();
         } else {
             //Remove the last top controller with lifecycle
-            removeFromViewHierarchy(lastTopController);
+            removeFromViewHierarchyOfContainer(lastTopController);
 
             onNavigationCompleted();
         }
@@ -137,7 +135,7 @@ public class NavigationActivity extends Activity {
                 @Override
                 public void onAnimationEnd(Animator animation) {
                     //Remove the last top controller with lifecycle
-                    removeFromViewHierarchy(lastTopController);
+                    removeFromViewHierarchyOfContainer(lastTopController);
                     onNavigationCompleted();
                 }
 
@@ -153,7 +151,7 @@ public class NavigationActivity extends Activity {
             }).start();
         } else {
             //Remove the last top controller with lifecycle
-            removeFromViewHierarchy(lastTopController);
+            removeFromViewHierarchyOfContainer(lastTopController);
             onNavigationCompleted();
         }
     }
@@ -177,7 +175,7 @@ public class NavigationActivity extends Activity {
         //Clear the top most one with lifecycle
         ViewController currentTop = currentStack().pop();
 
-        removeFromViewHierarchy(currentTop);
+        removeFromViewHierarchyOfContainer(currentTop);
 
         currentStack().clear();
 
@@ -205,7 +203,7 @@ public class NavigationActivity extends Activity {
         //Clear the top most one with lifecycle
         ViewController currentTop = currentStack().pop();
 
-        removeFromViewHierarchy(currentTop);
+        removeFromViewHierarchyOfContainer(currentTop);
 
         while (currentStack().size() > 1) {
             currentStack().pop();
@@ -248,7 +246,7 @@ public class NavigationActivity extends Activity {
 
                 @Override
                 public void onAnimationEnd(Animator animation) {
-                    removeFromViewHierarchy(lastTopController);
+                    removeFromViewHierarchyOfContainer(lastTopController);
                     onNavigationCompleted();
                 }
 
@@ -263,7 +261,7 @@ public class NavigationActivity extends Activity {
                 }
             }).start();
         } else {
-            removeFromViewHierarchy(lastTopController);
+            removeFromViewHierarchyOfContainer(lastTopController);
             onNavigationCompleted();
         }
     }
@@ -297,7 +295,7 @@ public class NavigationActivity extends Activity {
                 @Override
                 public void onAnimationEnd(Animator animation) {
                     //Remove the visible controller with lifecycle
-                    removeFromViewHierarchy(lastTopController);
+                    removeFromViewHierarchyOfContainer(lastTopController);
 
                     onNavigationCompleted();
                 }
@@ -314,7 +312,7 @@ public class NavigationActivity extends Activity {
             }).start();
         } else {
             //Remove the visible controller with lifecycle
-            removeFromViewHierarchy(lastTopController);
+            removeFromViewHierarchyOfContainer(lastTopController);
 
             onNavigationCompleted();
         }
@@ -397,11 +395,15 @@ public class NavigationActivity extends Activity {
         }
     }
 
-    protected void addToViewHierarchy(ViewController viewController) {
+    public void addToViewHierarchy(ViewController viewController) {
         addToViewHierarchy(viewController, null);
     }
 
-    protected void addToViewHierarchy(ViewController viewController, Integer index) {
+    public void addToViewHierarchy(ViewController viewController, Integer index) {
+        addToViewHierarchyOfContainer(rootView, viewController, index);
+    }
+
+    public void addToViewHierarchyOfContainer(ViewGroup container, ViewController viewController, Integer index) {
         if (viewController != null) {
             if (viewController.getNavigationActivity() != null) {
                 throw new IllegalStateException("This view controller is already presented on screen.");
@@ -413,16 +415,20 @@ public class NavigationActivity extends Activity {
 
             //Add the view
             if (index == null) {
-                rootView.addView(viewController.getView());
+                container.addView(viewController.getView());
             } else {
-                rootView.addView(viewController.getView(), index);
+                container.addView(viewController.getView(), index);
             }
 
             viewController.viewDidAppear();
         }
     }
 
-    protected void removeFromViewHierarchy(ViewController viewController) {
+    public void removeFromViewHierarchyOfContainer(ViewController viewController) {
+        removeFromViewHierarchyOfContainer(rootView, viewController);
+    }
+
+    public void removeFromViewHierarchyOfContainer(ViewGroup container, ViewController viewController) {
         if (viewController != null) {
 
             if (viewController.getView() == null) {
@@ -432,7 +438,7 @@ public class NavigationActivity extends Activity {
             viewController.viewWillDisappear();
 
             viewController.setNavigationActivity(null);
-            rootView.removeView(viewController.getView());
+            container.removeView(viewController.getView());
 
             viewController.viewDidDisappear();
         }

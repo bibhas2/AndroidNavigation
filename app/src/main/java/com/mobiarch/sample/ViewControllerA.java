@@ -22,6 +22,13 @@ public class ViewControllerA extends ViewController {
                 getNavigationActivity().pushViewController(new ViewControllerB(), true);
             }
         });
+
+        getView().findViewById(R.id.buttonToPushPagerController).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getNavigationActivity().pushViewController(new PageViewController(), true);
+            }
+        });
     }
 
     @Override
