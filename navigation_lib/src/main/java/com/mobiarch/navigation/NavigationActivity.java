@@ -84,7 +84,7 @@ public class NavigationActivity extends Activity {
         addToViewHierarchy(viewController);
 
         if (animated) {
-            viewController.getView().setTranslationX(500);
+            viewController.getView().setTranslationX(rootView.getWidth());
             viewController.getView().animate().translationX(0).setListener(new Animator.AnimatorListener() {
                 @Override
                 public void onAnimationStart(Animator animation) {
@@ -128,7 +128,7 @@ public class NavigationActivity extends Activity {
         addToViewHierarchy(currentStack().peek(), 0);
 
         if (animated) {
-            lastTopController.getView().animate().translationX(500).setListener(new Animator.AnimatorListener() {
+            lastTopController.getView().animate().translationX(rootView.getWidth()).setListener(new Animator.AnimatorListener() {
                 @Override
                 public void onAnimationStart(Animator animation) {
 
@@ -239,7 +239,7 @@ public class NavigationActivity extends Activity {
         addToViewHierarchy(viewController);
 
         if (animated) {
-            viewController.getView().setTranslationY(700);
+            viewController.getView().setTranslationY(rootView.getHeight());
             viewController.getView().animate().translationY(0).setListener(new Animator.AnimatorListener() {
                 @Override
                 public void onAnimationStart(Animator animation) {
@@ -288,7 +288,7 @@ public class NavigationActivity extends Activity {
         addToViewHierarchy(getTopViewController(), 0);
 
         if (animated) {
-            lastTopController.getView().animate().translationY(1000).setListener(new Animator.AnimatorListener() {
+            lastTopController.getView().animate().translationY(rootView.getHeight()).setListener(new Animator.AnimatorListener() {
                 @Override
                 public void onAnimationStart(Animator animation) {
 
