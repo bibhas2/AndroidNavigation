@@ -1,5 +1,6 @@
 package com.mobiarch.sample;
 
+import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import com.mobiarch.navigation.NavigationActivity;
 import com.mobiarch.navigation.ViewController;
@@ -42,6 +43,15 @@ public class PageViewController extends ViewController {
             public int getCount() {
                 return controllerList.length;
             }
+
+            @Override
+            public CharSequence getPageTitle(int position) {
+                return "TAB " + position;
+            }
         });
+
+        TabLayout tabs = (TabLayout) getView().findViewById(R.id.tabs);
+
+        tabs.setupWithViewPager(viewPager);
     }
 }
