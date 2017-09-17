@@ -4,6 +4,7 @@ import android.animation.Animator;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -21,7 +22,7 @@ import java.util.List;
  * <p>You will need to subclass this class. From the onCreate() method
  * push the root view controller.</p>
  */
-public class NavigationActivity extends Activity {
+public class NavigationActivity extends AppCompatActivity {
     ViewGroup rootView;
     ArrayDeque<ArrayDeque<ViewController>> stackOfStacks = new ArrayDeque<>();
     boolean isFirstLaunch = true;
@@ -338,9 +339,9 @@ public class NavigationActivity extends Activity {
     }
 
     protected void onNavigationCompleted() {
-        getActionBar().setDisplayHomeAsUpEnabled(
+        getSupportActionBar().setDisplayHomeAsUpEnabled(
                 currentStack().size() > 1);
-        getActionBar().setHomeButtonEnabled(
+        getSupportActionBar().setHomeButtonEnabled(
                 currentStack().size() > 1);
 
         invalidateOptionsMenu();
