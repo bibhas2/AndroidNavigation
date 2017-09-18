@@ -1,7 +1,6 @@
 package com.mobiarch.navigation;
 
 import android.animation.Animator;
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -23,21 +22,32 @@ import java.util.List;
  * push the root view controller.</p>
  */
 public class NavigationActivity extends AppCompatActivity {
-    ViewGroup rootView;
+    ViewGroup navigationContainerView;
     ArrayDeque<ArrayDeque<ViewController>> stackOfStacks = new ArrayDeque<>();
     boolean isFirstLaunch = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.navigation_activity);
+        setContentView(getLayoutResourceID());
 
-        rootView = (ViewGroup) findViewById(R.id.rootView);
+        navigationContainerView = (ViewGroup) findViewById(R.id.navigationContainerView);
 
         //Create the first stack
         stackOfStacks.push(new ArrayDeque<ViewController>());
 
         isFirstLaunch = true;
+    }
+
+    /**
+     * Subclasses can supply a custom layout resource by overriding this method.
+     * The layout should either have a ViewGroup with ID navigationContainerView or
+     * the subclass must set a container view by calling setNavigationContainerView.
+     *
+     * @return A custom layout resource for the navigation activity.
+     */
+    public int getLayoutResourceID() {
+        return R.layout.navigation_activity;
     }
 
     @Override
@@ -83,7 +93,7 @@ public class NavigationActivity extends AppCompatActivity {
         addToViewHierarchy(viewController);
 
         if (animated) {
-            viewController.getView().setTranslationX(rootView.getWidth());
+            viewController.getView().setTranslationX(getNavigationContainerView().getWidth());
             viewController.getView().animate().translationX(0).setListener(new Animator.AnimatorListener() {
                 @Override
                 public void onAnimationStart(Animator animation) {
@@ -127,7 +137,7 @@ public class NavigationActivity extends AppCompatActivity {
         addToViewHierarchy(currentStack().peek(), 0);
 
         if (animated) {
-            lastTopController.getView().animate().translationX(rootView.getWidth()).setListener(new Animator.AnimatorListener() {
+            lastTopController.getView().animate().translationX(getNavigationContainerView().getWidth()).setListener(new Animator.AnimatorListener() {
                 @Override
                 public void onAnimationStart(Animator animation) {
 
@@ -238,7 +248,7 @@ public class NavigationActivity extends AppCompatActivity {
         addToViewHierarchy(viewController);
 
         if (animated) {
-            viewController.getView().setTranslationY(rootView.getHeight());
+            viewController.getView().setTranslationY(getNavigationContainerView().getHeight());
             viewController.getView().animate().translationY(0).setListener(new Animator.AnimatorListener() {
                 @Override
                 public void onAnimationStart(Animator animation) {
@@ -287,7 +297,7 @@ public class NavigationActivity extends AppCompatActivity {
         addToViewHierarchy(getTopViewController(), 0);
 
         if (animated) {
-            lastTopController.getView().animate().translationY(rootView.getHeight()).setListener(new Animator.AnimatorListener() {
+            lastTopController.getView().animate().translationY(getNavigationContainerView().getHeight()).setListener(new Animator.AnimatorListener() {
                 @Override
                 public void onAnimationStart(Animator animation) {
 
@@ -401,7 +411,7 @@ public class NavigationActivity extends AppCompatActivity {
     }
 
     public void addToViewHierarchy(ViewController viewController, Integer index) {
-        addToViewHierarchyOfContainer(rootView, viewController, index);
+        addToViewHierarchyOfContainer(getNavigationContainerView(), viewController, index);
     }
 
     public void addToViewHierarchyOfContainer(ViewGroup container, ViewController viewController, Integer index) {
@@ -426,7 +436,7 @@ public class NavigationActivity extends AppCompatActivity {
     }
 
     public void removeFromViewHierarchyOfContainer(ViewController viewController) {
-        removeFromViewHierarchyOfContainer(rootView, viewController);
+        removeFromViewHierarchyOfContainer(getNavigationContainerView(), viewController);
     }
 
     public void removeFromViewHierarchyOfContainer(ViewGroup container, ViewController viewController) {
@@ -458,5 +468,13 @@ public class NavigationActivity extends AppCompatActivity {
 
     protected ArrayDeque<ViewController> currentStack() {
         return stackOfStacks.peek();
+    }
+
+    public ViewGroup getNavigationContainerView() {
+        return navigationContainerView;
+    }
+
+    public void setNavigationContainerView(ViewGroup navigationContainerView) {
+        this.navigationContainerView = navigationContainerView;
     }
 }
