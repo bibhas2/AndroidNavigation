@@ -25,4 +25,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Push View Pager Controller" />
+
+    <Button
+        android:id="@+id/buttonToOpenMaterialShowcase"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Open Material Showcase" />
 </LinearLayout>

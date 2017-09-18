@@ -1,5 +1,6 @@
 package com.mobiarch.sample;
 
+import android.content.Intent;
 import android.util.Log;
 import android.view.View;
 
@@ -27,6 +28,14 @@ public class ViewControllerA extends ViewController {
             @Override
             public void onClick(View v) {
                 getNavigationActivity().pushViewController(new PageViewController(), true);
+            }
+        });
+
+        getView().findViewById(R.id.buttonToOpenMaterialShowcase).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getNavigationActivity(), MaterialShowcaseActivity.class);
+                getNavigationActivity().startActivity(intent);
             }
         });
     }
