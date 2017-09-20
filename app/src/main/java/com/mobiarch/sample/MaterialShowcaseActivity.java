@@ -110,15 +110,15 @@ public class MaterialShowcaseActivity extends NavigationActivity
     }
 
     @Override
-    protected void onNavigationCompleted() {
-        if (currentStack().size() > 1) {
-            toggle.setDrawerIndicatorEnabled(false);
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        } else {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(false);
-            toggle.setDrawerIndicatorEnabled(true);
-        }
-
-        invalidateOptionsMenu();
+protected void onNavigationCompleted() {
+    if (currentStack().size() > 1) {
+        toggle.setDrawerIndicatorEnabled(false);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    } else {
+        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+        toggle.setDrawerIndicatorEnabled(true);
     }
+
+    invalidateOptionsMenu();
+}
 }
