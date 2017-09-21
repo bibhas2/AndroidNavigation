@@ -7,6 +7,7 @@ public class PageViewController extends ViewController {
     ViewPager viewPager;
     ViewController viewControllers[];
     ViewControllerPagerAdapter adapter;
+    Integer lastPrimaryItem;
 
     public PageViewController() {
         super(R.layout.page_view_controller);
@@ -40,9 +41,30 @@ public class PageViewController extends ViewController {
                     return getItem(position).getTitle();
                 }
             };
-
-            viewPager.setAdapter(getAdapter());
         }
+
+        /**
+         * Setting the adapter every time the view appears means
+         * the lifecycle of embedded view controllers will be preserved.
+         */
+        getViewPager().setAdapter(getAdapter());
+
+        if (lastPrimaryItem != null) {
+            getViewPager().setCurrentItem(lastPrimaryItem);
+        }
+    }
+
+    @Override
+    public void viewWillDisappear() {
+        super.viewWillDisappear();
+
+        /**
+         * Removing the adapter will remove all currently displayed
+         * view controllers from the hierarchy. Which
+         * will maintain lifecycle of these view controllers.
+         */
+        lastPrimaryItem = getViewPager().getCurrentItem();
+        getViewPager().setAdapter(null);
     }
 
     public ViewPager getViewPager() {
