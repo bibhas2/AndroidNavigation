@@ -19,6 +19,7 @@ import android.view.View;
  * </ul>
  */
 public class ViewController {
+    private String title;
     private View view;
     private NavigationActivity activity;
     private int layoutResourceId;
@@ -156,5 +157,13 @@ public class ViewController {
      * @param data Output data from the launched activity.
      */
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 }

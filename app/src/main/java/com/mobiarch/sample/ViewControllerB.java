@@ -8,6 +8,8 @@ import com.mobiarch.navigation.ViewController;
 public class ViewControllerB extends ViewController {
     public ViewControllerB() {
         super(R.layout.view_controller_b);
+
+        setTitle("Controller B");
     }
 
     @Override
@@ -29,13 +31,6 @@ public class ViewControllerB extends ViewController {
         });
 
         setOptionMenuResourceId(R.menu.view_controler_b_menu);
-    }
-
-    @Override
-    public void viewWillAppear() {
-        super.viewWillAppear();
-
-        getNavigationActivity().setTitle("View Controller B");
     }
 
     @Override

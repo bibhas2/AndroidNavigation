@@ -4,11 +4,14 @@ import android.content.Intent;
 import android.util.Log;
 import android.view.View;
 
+import com.mobiarch.navigation.PageViewController;
 import com.mobiarch.navigation.ViewController;
 
 public class ViewControllerA extends ViewController {
     public ViewControllerA() {
         super(R.layout.view_controller_a);
+
+        setTitle("Controller A");
     }
 
     @Override
@@ -27,7 +30,7 @@ public class ViewControllerA extends ViewController {
         getView().findViewById(R.id.buttonToPushPagerController).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getNavigationActivity().pushViewController(new PageViewController(), true);
+                getNavigationActivity().pushViewController(new SimpleTabController(), true);
             }
         });
 
@@ -45,8 +48,6 @@ public class ViewControllerA extends ViewController {
         super.viewWillAppear();
 
         Log.d("NAV", "viewWillAppear");
-
-        getNavigationActivity().setTitle("View Controller A");
     }
 
     @Override
