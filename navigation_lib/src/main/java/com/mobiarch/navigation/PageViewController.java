@@ -10,45 +10,43 @@ public class PageViewController extends ViewController {
 
     public PageViewController() {
         super(R.layout.page_view_controller);
-
-        adapter = new ViewControllerPagerAdapter() {
-            @Override
-            public NavigationActivity getActivity() {
-                return getNavigationActivity();
-            }
-
-            @Override
-            public ViewController getItem(int position) {
-                return getViewControllers()[position];
-            }
-
-            @Override
-            public int getCount() {
-                return getViewControllers().length;
-            }
-
-            @Override
-            public CharSequence getPageTitle(int position) {
-                return getItem(position).getTitle();
-            }
-        };
     }
 
     @Override
     public void viewDidLoad() {
         super.viewDidLoad();
 
-        setViewPager((ViewPager) getView());
+        viewPager = (ViewPager) getView();
+    }
+
+    @Override
+    public void viewWillAppear() {
+        super.viewWillAppear();
+
+        if (adapter == null) {
+            adapter = new ViewControllerPagerAdapter(getNavigationActivity()) {
+                @Override
+                public ViewController getItem(int position) {
+                    return getViewControllers()[position];
+                }
+
+                @Override
+                public int getCount() {
+                    return getViewControllers().length;
+                }
+
+                @Override
+                public CharSequence getPageTitle(int position) {
+                    return getItem(position).getTitle();
+                }
+            };
+
+            viewPager.setAdapter(getAdapter());
+        }
     }
 
     public ViewPager getViewPager() {
         return viewPager;
-    }
-
-    public void setViewPager(ViewPager viewPager) {
-        this.viewPager = viewPager;
-
-        viewPager.setAdapter(getAdapter());
     }
 
     public ViewController[] getViewControllers() {

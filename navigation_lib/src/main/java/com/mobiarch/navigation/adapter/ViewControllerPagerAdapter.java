@@ -22,14 +22,11 @@ import com.mobiarch.navigation.ViewController;
  * </p>
  */
 public abstract class ViewControllerPagerAdapter extends PagerAdapter {
+    NavigationActivity navigationActivity;
 
-    /**
-     * Returns the NavigationActivity that will host all the view
-     * controllers.
-     *
-     * @return The NavigationActivity.
-     */
-    abstract public NavigationActivity getActivity();
+    public ViewControllerPagerAdapter(NavigationActivity navigationActivity) {
+        this.navigationActivity = navigationActivity;
+    }
 
     /**
      * Returns the ViewController instance at a given position.
@@ -56,7 +53,7 @@ public abstract class ViewControllerPagerAdapter extends PagerAdapter {
     public Object instantiateItem(ViewGroup container, int position) {
         ViewController controller = getItem(position);
 
-        getActivity().addToViewHierarchyOfContainer(container, controller, null);
+        getNavigationActivity().addToViewHierarchyOfContainer(container, controller, null);
 
         return controller;
     }
@@ -65,6 +62,10 @@ public abstract class ViewControllerPagerAdapter extends PagerAdapter {
     public void destroyItem(ViewGroup container, int position, Object object) {
         ViewController controller = (ViewController) object;
 
-        getActivity().removeFromViewHierarchyOfContainer(container, controller);
+        getNavigationActivity().removeFromViewHierarchyOfContainer(container, controller);
+    }
+
+    public NavigationActivity getNavigationActivity() {
+        return navigationActivity;
     }
 }
