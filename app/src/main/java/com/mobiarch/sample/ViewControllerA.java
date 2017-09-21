@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.View;
 
 import com.mobiarch.navigation.PageViewController;
+import com.mobiarch.navigation.TabBarController;
 import com.mobiarch.navigation.ViewController;
 
 public class ViewControllerA extends ViewController {
@@ -30,7 +31,17 @@ public class ViewControllerA extends ViewController {
         getView().findViewById(R.id.buttonToPushPagerController).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getNavigationActivity().pushViewController(new SimpleTabController(), true);
+                ViewController[] controllerList = {
+                        new ViewControllerA(),
+                        new ViewControllerB(),
+                        new ViewControllerC()
+                };
+
+                TabBarController controller = new TabBarController();
+
+                controller.setViewControllers(controllerList);
+
+                getNavigationActivity().pushViewController(controller, true);
             }
         });
 
