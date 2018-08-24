@@ -11,7 +11,7 @@ public class MyActivity extends UIActivity {
         super.onCreate(savedInstanceState);
 
         setRootViewController(
-                new UINavigationController(new ViewControllerA())
+                new SplashScreenController()
         );
     }
 }
