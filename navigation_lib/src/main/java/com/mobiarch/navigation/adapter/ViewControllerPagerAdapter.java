@@ -3,7 +3,7 @@ package com.mobiarch.navigation.adapter;
 import android.support.v4.view.PagerAdapter;
 import android.view.View;
 import android.view.ViewGroup;
-import com.mobiarch.navigation.NavigationActivity;
+import com.mobiarch.navigation.UIActivity;
 import com.mobiarch.navigation.ViewController;
 
 /**
@@ -22,10 +22,10 @@ import com.mobiarch.navigation.ViewController;
  * </p>
  */
 public abstract class ViewControllerPagerAdapter extends PagerAdapter {
-    NavigationActivity navigationActivity;
+    UIActivity activity;
 
-    public ViewControllerPagerAdapter(NavigationActivity navigationActivity) {
-        this.navigationActivity = navigationActivity;
+    public ViewControllerPagerAdapter(UIActivity activity) {
+        this.activity = activity;
     }
 
     /**
@@ -53,7 +53,7 @@ public abstract class ViewControllerPagerAdapter extends PagerAdapter {
     public Object instantiateItem(ViewGroup container, int position) {
         ViewController controller = getItem(position);
 
-        getNavigationActivity().addToViewHierarchyOfContainer(container, controller, null);
+        getUIActivity().addToViewHierarchyOfContainer(container, controller, null);
 
         return controller;
     }
@@ -62,10 +62,10 @@ public abstract class ViewControllerPagerAdapter extends PagerAdapter {
     public void destroyItem(ViewGroup container, int position, Object object) {
         ViewController controller = (ViewController) object;
 
-        getNavigationActivity().removeFromViewHierarchyOfContainer(container, controller);
+        getUIActivity().removeFromViewHierarchyOfContainer(container, controller);
     }
 
-    public NavigationActivity getNavigationActivity() {
-        return navigationActivity;
+    public UIActivity getUIActivity() {
+        return activity;
     }
 }

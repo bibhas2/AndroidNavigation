@@ -30,7 +30,7 @@ public class TabBarController extends ViewController {
 
         ViewGroup container = (ViewGroup) getView().findViewById(R.id.container);
 
-        getNavigationActivity().addToViewHierarchyOfContainer(
+        getActivity().addToViewHierarchyOfContainer(
                 container, pageViewController, null);
         tabLayout.setupWithViewPager(pageViewController.getViewPager());
     }
@@ -41,7 +41,7 @@ public class TabBarController extends ViewController {
 
         ViewGroup container = (ViewGroup) getView().findViewById(R.id.container);
 
-        getNavigationActivity().removeFromViewHierarchyOfContainer(container, pageViewController);
+        getActivity().removeFromViewHierarchyOfContainer(container, pageViewController);
     }
 
     public void setViewControllers(ViewController[] viewControllers) {

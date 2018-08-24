@@ -2,13 +2,16 @@ package com.mobiarch.sample;
 
 import android.os.Bundle;
 
-import com.mobiarch.navigation.NavigationActivity;
+import com.mobiarch.navigation.UIActivity;
+import com.mobiarch.navigation.UINavigationController;
 
-public class MyActivity extends NavigationActivity {
+public class MyActivity extends UIActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        pushViewController(new ViewControllerA(), false);
+        setRootViewController(
+                new UINavigationController(new ViewControllerA())
+        );
     }
 }

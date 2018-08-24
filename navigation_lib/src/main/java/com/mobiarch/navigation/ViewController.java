@@ -21,9 +21,10 @@ import android.view.View;
 public class ViewController {
     private String title;
     private View view;
-    private NavigationActivity activity;
+    private UIActivity activity;
     private int layoutResourceId;
     private Integer optionMenuResourceId;
+    private UINavigationController navigationController;
 
     /**
      * Create a new instance of a ViewController.
@@ -48,11 +49,11 @@ public class ViewController {
         return view;
     }
 
-    public NavigationActivity getNavigationActivity() {
+    public UIActivity getActivity() {
         return activity;
     }
 
-    public void setNavigationActivity(NavigationActivity activity) {
+    public void setActivity(UIActivity activity) {
         this.activity = activity;
     }
 
@@ -159,11 +160,23 @@ public class ViewController {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
     }
 
+    public boolean onBackPressed() {
+        return false;
+    }
+
     public String getTitle() {
         return title;
     }
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public UINavigationController getNavigationController() {
+        return navigationController;
+    }
+
+    public void setNavigationController(UINavigationController navigationController) {
+        this.navigationController = navigationController;
     }
 }

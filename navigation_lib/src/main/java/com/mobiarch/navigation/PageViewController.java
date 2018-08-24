@@ -25,7 +25,7 @@ public class PageViewController extends ViewController {
         super.viewWillAppear();
 
         if (adapter == null) {
-            adapter = new ViewControllerPagerAdapter(getNavigationActivity()) {
+            adapter = new ViewControllerPagerAdapter(getActivity()) {
                 @Override
                 public ViewController getItem(int position) {
                     return getViewControllers()[position];

@@ -8,16 +8,17 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.mobiarch.navigation.NavigationActivity;
+import com.mobiarch.navigation.UIActivity;
+import com.mobiarch.navigation.UINavigationController;
 
-public class MaterialShowcaseActivity extends NavigationActivity
+public class MaterialShowcaseActivity extends UIActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     ActionBarDrawerToggle toggle;
+    UINavigationController navigationController;
     @Override
     public int getLayoutResourceID() {
         return R.layout.activity_material_showcase;
@@ -54,7 +55,8 @@ public class MaterialShowcaseActivity extends NavigationActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        pushViewController(new ViewControllerA(), false);
+        navigationController = new UINavigationController(new ViewControllerA());
+        setRootViewController(navigationController);
     }
 
     @Override
@@ -96,11 +98,11 @@ public class MaterialShowcaseActivity extends NavigationActivity
         int id = item.getItemId();
 
         if (id == R.id.openControllerA) {
-            pushViewController(new ViewControllerA(), true);
+            navigationController.pushViewController(new ViewControllerA(), true);
         } else if (id == R.id.openControllerB) {
-            pushViewController(new ViewControllerB(), true);
+            navigationController.pushViewController(new ViewControllerB(), true);
         } else if (id == R.id.openControllerC) {
-            pushViewController(new ViewControllerC(), true);
+            navigationController.pushViewController(new ViewControllerC(), true);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -110,15 +112,15 @@ public class MaterialShowcaseActivity extends NavigationActivity
     }
 
     @Override
-protected void onNavigationCompleted() {
-    if (currentStack().size() > 1) {
-        toggle.setDrawerIndicatorEnabled(false);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-    } else {
-        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
-        toggle.setDrawerIndicatorEnabled(true);
-    }
+    protected void onNavigationCompleted() {
+        if (getStack().size() > 1) {
+            toggle.setDrawerIndicatorEnabled(false);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        } else {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+            toggle.setDrawerIndicatorEnabled(true);
+        }
 
-    invalidateOptionsMenu();
-}
+        invalidateOptionsMenu();
+    }
 }

@@ -19,14 +19,14 @@ public class ViewControllerC extends ViewController {
         getView().findViewById(R.id.buttonToPushController).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getNavigationActivity().pushViewController(new ViewControllerC(), true);
+                getNavigationController().pushViewController(new ViewControllerC(), true);
             }
         });
 
         getView().findViewById(R.id.buttonToPresentController).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getNavigationActivity().presentViewController(new ViewControllerA(), false);
+                getActivity().presentViewController(new ViewControllerA(), false);
             }
         });
 
@@ -36,7 +36,7 @@ public class ViewControllerC extends ViewController {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.closeModal) {
-            getNavigationActivity().dismissViewController(true);
+            getActivity().dismissViewController(true);
 
             return true;
         } else {

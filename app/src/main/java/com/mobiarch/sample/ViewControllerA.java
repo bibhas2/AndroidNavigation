@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.util.Log;
 import android.view.View;
 
-import com.mobiarch.navigation.PageViewController;
 import com.mobiarch.navigation.TabBarController;
 import com.mobiarch.navigation.ViewController;
 
@@ -24,7 +23,7 @@ public class ViewControllerA extends ViewController {
         getView().findViewById(R.id.buttonToPushController).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getNavigationActivity().pushViewController(new ViewControllerB(), true);
+                getNavigationController().pushViewController(new ViewControllerB(), true);
             }
         });
 
@@ -41,15 +40,15 @@ public class ViewControllerA extends ViewController {
 
                 controller.setViewControllers(controllerList);
 
-                getNavigationActivity().pushViewController(controller, true);
+                getNavigationController().pushViewController(controller, true);
             }
         });
 
         getView().findViewById(R.id.buttonToOpenMaterialShowcase).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getNavigationActivity(), MaterialShowcaseActivity.class);
-                getNavigationActivity().startActivity(intent);
+                Intent intent = new Intent(getActivity(), MaterialShowcaseActivity.class);
+                getActivity().startActivity(intent);
             }
         });
     }
