@@ -3,6 +3,7 @@ package com.mobiarch.navigation;
 import android.content.Intent;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 
 /**
  * A UIViewController is a much simpler and easier to reason with
@@ -24,7 +25,7 @@ public class UIViewController {
     private UIActivity activity;
     private int layoutResourceId;
     private Integer optionMenuResourceId;
-    private UINavigationController navigationController;
+    private UIViewController parent;
 
     /**
      * Create a new instance of a UIViewController.
@@ -173,10 +174,30 @@ public class UIViewController {
     }
 
     public UINavigationController getNavigationController() {
-        return navigationController;
+        for (UIViewController p = getParent(); p != null; p = p.getParent()) {
+            if (p instanceof UINavigationController) {
+                return (UINavigationController) p;
+            }
+        }
+
+        return null;
     }
 
-    public void setNavigationController(UINavigationController navigationController) {
-        this.navigationController = navigationController;
+    public UIViewController getParent() {
+        return parent;
+    }
+
+    private void setParent(UIViewController parent) {
+        this.parent = parent;
+    }
+
+    public void addChild(UIViewController child, ViewGroup container, Integer index) {
+        child.setParent(this);
+        getActivity().addToViewHierarchyOfContainer(container, child, index);
+    }
+
+    public void removeFromParent(ViewGroup container) {
+        getActivity().removeFromViewHierarchyOfContainer(container, this);
+        setParent(null);
     }
 }

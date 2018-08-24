@@ -33,16 +33,14 @@ public class UINavigationController extends UIViewController {
      */
     public void setViewControllers(List<UIViewController> list) {
         //Clear the top most one with lifecycle
-        getActivity().removeFromViewHierarchyOfContainer(getContainer(), getTopViewController());
-        getTopViewController().setNavigationController(null);
+        getTopViewController().removeFromParent(getContainer());
 
         stack.clear();
 
         stack.addAll(list);
 
         //Show the top most
-        getTopViewController().setNavigationController(this);
-        getActivity().addToViewHierarchyOfContainer(getContainer(), getTopViewController(), null);
+        addChild(getTopViewController(), getContainer(), null);
     }
 
     /**
@@ -58,8 +56,7 @@ public class UINavigationController extends UIViewController {
 
         stack.push(viewController);
 
-        viewController.setNavigationController(this);
-        getActivity().addToViewHierarchyOfContainer(getContainer(), viewController, null);
+        addChild(viewController, getContainer(), null);
 
         if (animated) {
             viewController.getView().setTranslationX(getContainer().getWidth());
@@ -71,8 +68,7 @@ public class UINavigationController extends UIViewController {
                 @Override
                 public void onAnimationEnd(Animator animation) {
                     //Remove the last top controller with lifecycle
-                    getActivity().removeFromViewHierarchyOfContainer(getContainer(), lastTopController);
-                    lastTopController.setNavigationController(null);
+                    lastTopController.removeFromParent(getContainer());
 //                    onNavigationCompleted();
                 }
 
@@ -86,8 +82,7 @@ public class UINavigationController extends UIViewController {
             }).start();
         } else {
             //Remove the last top controller with lifecycle
-            getActivity().removeFromViewHierarchyOfContainer(getContainer(), lastTopController);
-            lastTopController.setNavigationController(null);
+            lastTopController.removeFromParent(getContainer());
 //            onNavigationCompleted();
         }
     }
@@ -103,8 +98,7 @@ public class UINavigationController extends UIViewController {
         final UIViewController lastTopController = stack.pop();
 
         //Add the previous controller but below the current one
-        stack.peek().setNavigationController(this);
-        getActivity().addToViewHierarchyOfContainer(getContainer(), stack.peek(), 0);
+        addChild(stack.peek(), getContainer(), 0);
 
         if (animated) {
             lastTopController.getView().animate().translationX(getContainer().getWidth()).setListener(new Animator.AnimatorListener() {
@@ -116,8 +110,8 @@ public class UINavigationController extends UIViewController {
                 @Override
                 public void onAnimationEnd(Animator animation) {
                     //Remove the last top controller with lifecycle
-                    getActivity().removeFromViewHierarchyOfContainer(getContainer(), lastTopController);
-                    lastTopController.setNavigationController(null);
+                    lastTopController.removeFromParent(getContainer());
+
 //                    onNavigationCompleted();
                 }
 
@@ -133,8 +127,7 @@ public class UINavigationController extends UIViewController {
             }).start();
         } else {
             //Remove the last top controller with lifecycle
-            getActivity().removeFromViewHierarchyOfContainer(getContainer(), lastTopController);
-            lastTopController.setNavigationController(null);
+            lastTopController.removeFromParent(getContainer());
 //            onNavigationCompleted();
         }
     }
@@ -150,16 +143,14 @@ public class UINavigationController extends UIViewController {
         }
 
         //Clear the top most one with lifecycle
-        getActivity().removeFromViewHierarchyOfContainer(getContainer(), getTopViewController());
-        getTopViewController().setNavigationController(null);
+        getTopViewController().removeFromParent(getContainer());
 
         while (stack.size() > 1) {
             stack.pop();
         }
 
         //Show the top most
-        getActivity().addToViewHierarchyOfContainer(getContainer(), getTopViewController(), null);
-        getTopViewController().setNavigationController(this);
+        addChild(getTopViewController(), getContainer(), null);
 
         //onNavigationCompleted();
     }
@@ -177,16 +168,14 @@ public class UINavigationController extends UIViewController {
     public void viewWillAppear() {
         super.viewWillAppear();
 
-        getTopViewController().setNavigationController(this);
-        getActivity().addToViewHierarchyOfContainer(getContainer(), getTopViewController(), null);
+        addChild(getTopViewController(), getContainer(), null);
     }
 
     @Override
     public void viewWillDisappear() {
         super.viewWillDisappear();
 
-        getActivity().removeFromViewHierarchyOfContainer(getContainer(), getTopViewController());
-        getTopViewController().setNavigationController(null);
+        getTopViewController().removeFromParent(getContainer());
     }
 
     @Override
