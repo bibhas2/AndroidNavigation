@@ -1,6 +1,6 @@
 ## What is this?
 
-This is a library that brings the ViewController API from iOS to Android. 
+This is a library that brings the UIViewController API from iOS to Android.
 A view controller is a direct replacement for an Android Fragment.
 
 ## Using this library
