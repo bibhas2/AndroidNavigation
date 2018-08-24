@@ -1,6 +1,7 @@
 package com.mobiarch.navigation;
 
 import android.animation.Animator;
+import android.arch.lifecycle.Lifecycle;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -32,7 +33,20 @@ public class UIActivity extends AppCompatActivity {
     }
 
     public void setRootViewController(UIViewController c) {
+
+        while (stack.size() > 0) {
+            UIViewController topController = stack.pop();
+
+            if (getLifecycle().getCurrentState() == Lifecycle.State.STARTED || getLifecycle().getCurrentState() == Lifecycle.State.RESUMED) {
+                removeFromViewHierarchy(topController);
+            }
+        }
+
         stack.push(c);
+
+        if (getLifecycle().getCurrentState() == Lifecycle.State.STARTED || getLifecycle().getCurrentState() == Lifecycle.State.RESUMED) {
+            addToViewHierarchy(c);
+        }
     }
 
     /**
