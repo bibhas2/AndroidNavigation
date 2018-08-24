@@ -3,9 +3,9 @@ package com.mobiarch.navigation;
 import android.support.v4.view.ViewPager;
 import com.mobiarch.navigation.adapter.ViewControllerPagerAdapter;
 
-public class PageViewController extends ViewController {
+public class PageViewController extends UIViewController {
     ViewPager viewPager;
-    ViewController viewControllers[];
+    UIViewController viewControllers[];
     ViewControllerPagerAdapter adapter;
     Integer lastPrimaryItem;
 
@@ -27,7 +27,7 @@ public class PageViewController extends ViewController {
         if (adapter == null) {
             adapter = new ViewControllerPagerAdapter(getActivity()) {
                 @Override
-                public ViewController getItem(int position) {
+                public UIViewController getItem(int position) {
                     return getViewControllers()[position];
                 }
 
@@ -71,11 +71,11 @@ public class PageViewController extends ViewController {
         return viewPager;
     }
 
-    public ViewController[] getViewControllers() {
+    public UIViewController[] getViewControllers() {
         return viewControllers;
     }
 
-    public void setViewControllers(ViewController[] viewControllers) {
+    public void setViewControllers(UIViewController[] viewControllers) {
         this.viewControllers = viewControllers;
     }
 

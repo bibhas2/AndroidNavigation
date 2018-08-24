@@ -7,7 +7,7 @@ import android.view.ViewGroup;
  * This class is similar to UITabBarController of iOS. The tabs
  * are shown on top instead of bottom.
  */
-public class TabBarController extends ViewController {
+public class TabBarController extends UIViewController {
     private PageViewController pageViewController;
     private TabLayout tabLayout;
 
@@ -44,7 +44,7 @@ public class TabBarController extends ViewController {
         getActivity().removeFromViewHierarchyOfContainer(container, pageViewController);
     }
 
-    public void setViewControllers(ViewController[] viewControllers) {
+    public void setViewControllers(UIViewController[] viewControllers) {
         pageViewController.setViewControllers(viewControllers);
     }
 

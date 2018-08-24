@@ -13,7 +13,7 @@ import android.view.ViewGroup;
 import java.util.ArrayDeque;
 
 /**
- * <p>UIActivity hosts a stack of ViewController objects.
+ * <p>UIActivity hosts a stack of UIViewController objects.
  * It is analogous to UIViewController in iOS.</p>
  *
  * <p>You will need to subclass this class. From the onCreate() method
@@ -21,7 +21,7 @@ import java.util.ArrayDeque;
  */
 public class UIActivity extends AppCompatActivity {
     ViewGroup containerView;
-    ArrayDeque<ViewController> stack = new ArrayDeque<>();
+    ArrayDeque<UIViewController> stack = new ArrayDeque<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,7 +31,7 @@ public class UIActivity extends AppCompatActivity {
         containerView = (ViewGroup) findViewById(R.id.navigationContainerView);
     }
 
-    public void setRootViewController(ViewController c) {
+    public void setRootViewController(UIViewController c) {
         stack.push(c);
     }
 
@@ -73,9 +73,9 @@ public class UIActivity extends AppCompatActivity {
      * @param viewController The view controller to open modally.
      * @param animated
      */
-    public void presentViewController(ViewController viewController, boolean animated) {
+    public void presentViewController(UIViewController viewController, boolean animated) {
         //Remove the currently visible controller with lifecycle
-        final ViewController lastTopController = getTopViewController();
+        final UIViewController lastTopController = getTopViewController();
 
         stack.push(viewController);
 
@@ -122,7 +122,7 @@ public class UIActivity extends AppCompatActivity {
             return; //Nothing is presented
         }
 
-        final ViewController lastTopController = stack.pop();
+        final UIViewController lastTopController = stack.pop();
 
         //Show the view of the previous stack but below the current view
         addToViewHierarchy(getTopViewController(), 0);
@@ -185,7 +185,7 @@ public class UIActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        ViewController currentTop = stack.peek();
+        UIViewController currentTop = stack.peek();
 
         if (currentTop != null) {
             if (currentTop.onOptionsItemSelected(item)) {
@@ -204,7 +204,7 @@ public class UIActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        ViewController currentTop = stack.peek();
+        UIViewController currentTop = stack.peek();
 
         if (currentTop != null) {
             if (currentTop.getOptionMenuResourceId() != null) {
@@ -219,11 +219,11 @@ public class UIActivity extends AppCompatActivity {
         return super.onCreateOptionsMenu(menu);
     }
 
-    public ViewController getTopViewController() {
+    public UIViewController getTopViewController() {
         return stack.peek();
     }
 
-    protected void loadViewIfNeeded(ViewController viewController) {
+    protected void loadViewIfNeeded(UIViewController viewController) {
         if (viewController.getView() == null) {
             View v = getLayoutInflater().inflate(viewController.getLayoutResourceId(), null);
 
@@ -232,15 +232,15 @@ public class UIActivity extends AppCompatActivity {
         }
     }
 
-    private void addToViewHierarchy(ViewController viewController) {
+    private void addToViewHierarchy(UIViewController viewController) {
         addToViewHierarchy(viewController, null);
     }
 
-    private void addToViewHierarchy(ViewController viewController, Integer index) {
+    private void addToViewHierarchy(UIViewController viewController, Integer index) {
         addToViewHierarchyOfContainer(getContainerView(), viewController, index);
     }
 
-    public void addToViewHierarchyOfContainer(ViewGroup container, ViewController viewController, Integer index) {
+    public void addToViewHierarchyOfContainer(ViewGroup container, UIViewController viewController, Integer index) {
         if (viewController != null) {
             if (viewController.getActivity() != null) {
                 throw new IllegalStateException("This view controller is already presented on screen.");
@@ -261,11 +261,11 @@ public class UIActivity extends AppCompatActivity {
         }
     }
 
-    private void removeFromViewHierarchy(ViewController viewController) {
+    private void removeFromViewHierarchy(UIViewController viewController) {
         removeFromViewHierarchyOfContainer(getContainerView(), viewController);
     }
 
-    public void removeFromViewHierarchyOfContainer(ViewGroup container, ViewController viewController) {
+    public void removeFromViewHierarchyOfContainer(ViewGroup container, UIViewController viewController) {
         if (viewController != null) {
 
             if (viewController.getView() == null) {
@@ -285,7 +285,7 @@ public class UIActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        ViewController controller = getTopViewController();
+        UIViewController controller = getTopViewController();
 
         if (controller != null) {
             controller.onActivityResult(requestCode, resultCode, data);
@@ -300,7 +300,7 @@ public class UIActivity extends AppCompatActivity {
         this.containerView = v;
     }
 
-    protected ArrayDeque<ViewController> getStack() {
+    protected ArrayDeque<UIViewController> getStack() {
         return stack;
     }
 }

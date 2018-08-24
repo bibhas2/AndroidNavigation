@@ -5,20 +5,20 @@ import android.view.MenuItem;
 import android.view.View;
 
 /**
- * A ViewController is a much simpler and easier to reason with
+ * A UIViewController is a much simpler and easier to reason with
  * alternative to Fragments. It has a few advantages:
  *
  * <ul>
  *     <li>The lifecycle is compatible with UIViewController of iOS. This
  *     makes porting iOS code a breeze.</li>
- *     <li>You can directly supply data to a ViewController constructor and
+ *     <li>You can directly supply data to a UIViewController constructor and
  *     call any of its methods from other parts of the application. This is not easy to do in
  *     Fragment where the actual Fragment instance is not readily accessible. This
  *     will speed up development.
  *     </li>
  * </ul>
  */
-public class ViewController {
+public class UIViewController {
     private String title;
     private View view;
     private UIActivity activity;
@@ -27,12 +27,12 @@ public class ViewController {
     private UINavigationController navigationController;
 
     /**
-     * Create a new instance of a ViewController.
+     * Create a new instance of a UIViewController.
      *
      * @param layoutResourceId - The layout resource ID for the controller.
      *
      */
-    public ViewController(int layoutResourceId) {
+    public UIViewController(int layoutResourceId) {
         this.layoutResourceId = layoutResourceId;
     }
 

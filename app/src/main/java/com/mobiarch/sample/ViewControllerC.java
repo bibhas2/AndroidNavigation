@@ -3,9 +3,9 @@ package com.mobiarch.sample;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.mobiarch.navigation.ViewController;
+import com.mobiarch.navigation.UIViewController;
 
-public class ViewControllerC extends ViewController {
+public class ViewControllerC extends UIViewController {
     public ViewControllerC() {
         super(R.layout.view_controller_c);
 

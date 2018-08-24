@@ -7,10 +7,10 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UINavigationController extends ViewController {
-    ArrayDeque<ViewController> stack = new ArrayDeque<>();
+public class UINavigationController extends UIViewController {
+    ArrayDeque<UIViewController> stack = new ArrayDeque<>();
 
-    public UINavigationController(ViewController rootViewController) {
+    public UINavigationController(UIViewController rootViewController) {
         super(R.layout.navigation_controller);
 
         stack.push(rootViewController);
@@ -21,7 +21,7 @@ public class UINavigationController extends ViewController {
      *
      * @return
      */
-    public List<ViewController> getViewControllers() {
+    public List<UIViewController> getViewControllers() {
         return new ArrayList<>(stack);
     }
 
@@ -31,7 +31,7 @@ public class UINavigationController extends ViewController {
      *
      * @param list The new list of view controllers.
      */
-    public void setViewControllers(List<ViewController> list) {
+    public void setViewControllers(List<UIViewController> list) {
         //Clear the top most one with lifecycle
         getActivity().removeFromViewHierarchyOfContainer(getContainer(), getTopViewController());
         getTopViewController().setNavigationController(null);
@@ -53,8 +53,8 @@ public class UINavigationController extends ViewController {
      * @param viewController The view controller to be pushed to the top of the stack.
      * @param animated If animation should be used to present the view controller.
      */
-    public void pushViewController(ViewController viewController, boolean animated) {
-        final ViewController lastTopController = stack.peek();
+    public void pushViewController(UIViewController viewController, boolean animated) {
+        final UIViewController lastTopController = stack.peek();
 
         stack.push(viewController);
 
@@ -100,7 +100,7 @@ public class UINavigationController extends ViewController {
      * @param animated If animation should be used to remove the view.
      */
     public void popViewController(boolean animated) {
-        final ViewController lastTopController = stack.pop();
+        final UIViewController lastTopController = stack.pop();
 
         //Add the previous controller but below the current one
         stack.peek().setNavigationController(this);
@@ -165,7 +165,7 @@ public class UINavigationController extends ViewController {
     }
 
 
-    public ViewController getTopViewController() {
+    public UIViewController getTopViewController() {
         return stack.peek();
     }
 
